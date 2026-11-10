@@ -25,7 +25,7 @@ const applicationForm: any = {
           type: 'email',
           placeholder: 'you@example.com',
           validation: [
-            { type: 'required' },
+            { type: 'required', message: 'Email is required.' },
             { type: 'email', message: 'Enter a valid email address.' }
           ]
         },
@@ -43,7 +43,7 @@ const applicationForm: any = {
           name: 'dateOfBirth',
           label: 'Date of birth',
           type: 'date',
-          validation: [{ type: 'required' }]
+          validation: [{ type: 'required', message: 'Date of birth is required.'}]
         },
       ]
     },
@@ -126,7 +126,7 @@ const applicationForm: any = {
           type: 'text',
           placeholder: 'Enter business name',
           showIf: { field: 'employmentType', equals: 'self-employed' },
-          validation: [{ type: 'required' }]
+          validation: []
         },
         {
           name: 'experience',
