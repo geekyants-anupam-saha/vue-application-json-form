@@ -70,10 +70,13 @@ const applicationForm: any = {
           placeholder: 'Select a state',
           dependsOn: 'country',
           options: [
-            { label: 'Karnataka', value: 'Karnataka' },
-            { label: 'West Bengal', value: 'West Bengal' },
-            { label: 'Maharashtra', value: 'Maharashtra' },
-            { label: 'Tamil Nadu', value: 'Tamil Nadu' }
+            { label: 'Karnataka', value: 'Karnataka', type: 'IN' },
+            { label: 'West Bengal', value: 'West Bengal', type: 'IN' },
+            { label: 'Maharashtra', value: 'Maharashtra', type: 'IN' },
+            { label: 'Tamil Nadu', value: 'Tamil Nadu', type: 'IN' },
+            { label: 'California', value: 'California', type: 'US' },
+            { label: 'New York', value: 'New York', type: 'US' },
+            { label: 'Texas', value: 'Texas', type: 'US' }
           ],
           validation: [{ type: 'required' }]
         },
@@ -126,7 +129,7 @@ const applicationForm: any = {
           type: 'text',
           placeholder: 'Enter business name',
           showIf: { field: 'employmentType', equals: 'self-employed' },
-          validation: []
+          validation: [{ type: 'required' }]
         },
         {
           name: 'experience',

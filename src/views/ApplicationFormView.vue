@@ -38,14 +38,25 @@ watch(
     { immediate: true }
 );
 
+const visibleFields = computed(() => {
+    return formDataObj.value.fields?.filter((field) => {
+        if (field.showIf && field.showIf.equals)
+            return field.showIf.equals === formValues.value[field.showIf.field]
+        else if (field.showIf && field.showIf.notEquals)
+            return field.showIf.notEquals !== formValues.value[field.showIf.field]
+        else
+            return true
+    })
+});
+
+
 function clearErrors() {
     Object.keys(errors).forEach(key => delete errors[key])
 }
 
 const saveApplicationData = () => {
     clearErrors();
-    const errorobj = validateStep(formDataObj.value, { ...formValues.value });
-    console.log('errorobj', errorobj);
+    const errorobj = validateStep(visibleFields.value, { ...formValues.value });
     Object.assign(errors, errorobj);
 
     if (Object.keys(errorobj).length > 0) {
@@ -130,8 +141,9 @@ const reviewSteps = computed(() => applicationFormJson.steps?.filter((step) => s
             </div>
 
             <div v-else class="fields-container">
-                <div v-for="field in formDataObj.fields" :key="field.name" class="field-wrapper">
-                    <DynamicField :field="field" v-model="formValues[field.name]" :error="errors[field.name]" />
+                <div v-for="field in visibleFields" :key="field.name" class="field-wrapper">
+                    <DynamicField :field="field" v-model="formValues[field.name]" :error="errors[field.name]"
+                        v-bind="field.dependsOn ? { formValues } : {}" />
                 </div>
             </div>
 

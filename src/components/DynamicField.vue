@@ -1,18 +1,31 @@
 <script setup>
+import { computed, defineProps, defineModel } from 'vue';
+
 const props = defineProps({
     field: {
         type: Object,
         required: true
     },
-    value: {
-        required: true
-    },
     error: {
         type: String,
+        required: false
+    },
+    formValues: {
+        type: Object,
         required: false
     }
 })
 const model = defineModel();
+
+const options = computed(() => {
+    const { dependsOn, options } = props.field;
+    if (dependsOn) {
+        const dependsOnValue = props.formValues[dependsOn];
+        const filteredOptions = options.filter((option) => option.type === dependsOnValue)
+        return filteredOptions;
+    }
+    return options ?? [];
+})
 </script>
 
 <template>
@@ -27,7 +40,8 @@ const model = defineModel();
     <div v-if="field.type === 'select'">
         <label :for="field.id">{{ field.label }}</label>
         <select :id="field.id" :required="field.required" v-model="model" class="form-select">
-            <option :value="option.value" v-for="option in field.options" :key="option.value">
+            <option value="" disabled>{{ field.placeholder ?? 'Select an option' }}</option>
+            <option :value="option.value" v-for="option in options" :key="option.value">
                 {{ option.label }}
             </option>
         </select>

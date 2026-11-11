@@ -38,12 +38,12 @@ export function validateField(
 }
 
 export function validateStep(
-  formObj: any,
+  visibleFields: any,
   values: any
 ) {
   const errors: any = {}
 
-  for (const field of formObj.fields) {
+  for (const field of visibleFields) {
     const error = validateField(field, values)
     if (error) errors[field.name] = error
   }
