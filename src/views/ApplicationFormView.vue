@@ -2,6 +2,7 @@
 import { useFormStore } from '../stores/formStore';
 import applicationFormJson from '../config/applicationForm';
 import DynamicField from '../components/DynamicField.vue';
+import ProgressBar from '@/components/ProgressBar.vue';
 import { ref, computed, watch, reactive } from 'vue';
 import { storeToRefs } from 'pinia';
 import { validateStep } from '../composables/useFormValidation';
@@ -20,6 +21,10 @@ const formDataObj = computed(() =>
         (step) => step.id === currentStepId.value
     )
 );
+
+const currentIndex = computed(() =>
+    Math.max(0, applicationFormJson?.steps?.findIndex(step => step.id === currentStepId.value))
+)
 
 watch(
     currentStepId,
@@ -97,7 +102,6 @@ const reviewSteps = computed(() => applicationFormJson.steps?.filter((step) => s
 
             <p class="success-message">
                 Your application has been submitted successfully.
-                We appreciate your time and will get back to you soon.
             </p>
 
             <div class="success-divider"></div>
@@ -114,6 +118,8 @@ const reviewSteps = computed(() => applicationFormJson.steps?.filter((step) => s
         </div>
 
         <div v-else class="form-content">
+            <ProgressBar :current="currentIndex + 1" :total="applicationFormJson?.steps?.length" />
+            <span class="eyebrow">STEP {{ currentIndex + 1 }}</span>
             <h1>{{ formDataObj.title }}</h1>
             <p>{{ formDataObj.description }}</p>
 
@@ -417,5 +423,12 @@ const reviewSteps = computed(() => applicationFormJson.steps?.filter((step) => s
 
 .success-button:hover {
     background: #4338ca;
+}
+
+.eyebrow {
+    color: var(--primary);
+    letter-spacing: .12em;
+    font-size: 11px;
+    font-weight: 700;
 }
 </style>
